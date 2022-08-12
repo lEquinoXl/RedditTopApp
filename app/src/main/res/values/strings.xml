@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Reddit Top</string>
+    <string name="source">https://www.reddit.com/top.json</string>
 </resources>
