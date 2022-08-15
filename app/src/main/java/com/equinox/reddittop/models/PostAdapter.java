@@ -20,18 +20,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     private List<Post> posts = new ArrayList<>();
 
-    interface OnPhotoClickListener {
-        void onPhotoClick(String image_source, int position);
+    public interface OnPhotoClickListener {
+        void onPhotoClick(String image_source);
     }
 
     private OnPhotoClickListener onPhotoClickListener;
 
-    public PostAdapter(List<Post> posts/*, OnPhotoClickListener onPhotoClickListener*/) {
+    public PostAdapter(List<Post> posts, OnPhotoClickListener onPhotoClickListener) {
         this.posts = posts;
-        /*this.onPhotoClickListener = onPhotoClickListener;*/
-    }
-
-    public PostAdapter() {
+        this.onPhotoClickListener = onPhotoClickListener;
     }
 
     public void setItems(Collection<Post> new_posts) {
@@ -64,7 +61,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onPhotoClickListener.onPhotoClick(post.getImage_source(), position);
+                onPhotoClickListener.onPhotoClick(post.getImage_source());
             }
         });
     }

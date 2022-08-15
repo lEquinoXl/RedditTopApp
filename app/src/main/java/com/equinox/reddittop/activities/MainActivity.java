@@ -1,15 +1,17 @@
-package com.equinox.reddittop;
+package com.equinox.reddittop.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.equinox.reddittop.R;
 import com.equinox.reddittop.models.Post;
 import com.equinox.reddittop.models.PostAdapter;
-import com.equinox.reddittop.models.Result;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,8 +41,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.viewArticles);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new PostAdapter(posts);
+        PostAdapter.OnPhotoClickListener photoClickListener = new PostAdapter.OnPhotoClickListener() {
+            @Override
+            public void onPhotoClick(String image_source) {
+                Intent intent = new Intent(MainActivity.this, ImageActivity.class);
+                intent.putExtra("image_source", image_source);
+
+                startActivity(intent);
+            }
+        };
+
+        adapter = new PostAdapter(posts, photoClickListener);
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         new GetData().execute(getString(R.string.source));
     }
 

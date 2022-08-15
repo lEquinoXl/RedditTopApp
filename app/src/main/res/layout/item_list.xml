@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_marginBottom="10dp">
 
     <LinearLayout
+        android:id="@+id/body_layout"
         android:layout_width="300sp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="10dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -20,20 +24,24 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_toStartOf="@+id/creation_date"
-                android:text="Author name" />
+                android:text="Author name"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/creation_date"
-                android:layout_width="30sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text=" 18h" />
+                android:paddingEnd="5dp"
+                android:text=" 18h"
+                android:textSize="20sp" />
         </RelativeLayout>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:text=" title" />
 
         <TextView
