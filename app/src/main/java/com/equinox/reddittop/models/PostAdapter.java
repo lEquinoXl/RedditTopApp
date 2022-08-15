@@ -12,10 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.equinox.reddittop.R;
 import com.squareup.picasso.Picasso;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
@@ -59,6 +57,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         Post post = posts.get(position);
         holder.author.setText(post.getAuthor_name());
         holder.creation_date.setText(post.getCreation_date());
+        holder.title.setText(post.getTitle());
         holder.comments_count.setText(post.getComments_count());
         Picasso.get().load(post.getThumbnail_source()).resize(140, 78).into(holder.image);
         holder.image.setVisibility(post.getImage_source() != null ? View.VISIBLE : View.GONE);
@@ -80,6 +79,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         private TextView creation_date;
         private ImageView image;
         private TextView comments_count;
+        private TextView title;
 
         public PostViewHolder(View itemView) {
             super(itemView);
@@ -87,6 +87,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             creation_date = itemView.findViewById(R.id.creation_date);
             image = itemView.findViewById(R.id.imageView);
             comments_count = itemView.findViewById(R.id.comments_count);
+            title = itemView.findViewById(R.id.title);
         }
     }
 }
