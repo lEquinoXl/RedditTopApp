@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         json_posts.add(jsonPosts.getString(i));
                         post.setAuthor_name(jsonPosts.getJSONObject(i).getJSONObject("data").getString("subreddit"));
                         post.setCreation_date(jsonPosts.getJSONObject(i).getJSONObject("data").getDouble("created_utc"));
+                        post.setThumbnail_source(jsonPosts.getJSONObject(i).getJSONObject("data").getString("thumbnail"));
                         post.setImage_source(jsonPosts.getJSONObject(i).getJSONObject("data").getString("url_overridden_by_dest"));
                         post.setComments_count(jsonPosts.getJSONObject(i).getJSONObject("data").getString("num_comments"));
                         posts.add(post);

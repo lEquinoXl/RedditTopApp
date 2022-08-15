@@ -3,16 +3,19 @@ package com.equinox.reddittop.models;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.equinox.reddittop.R;
+import com.squareup.picasso.Picasso;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
@@ -29,7 +32,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         this.posts = posts;
         /*this.onPhotoClickListener = onPhotoClickListener;*/
     }
-    public PostAdapter(){}
+
+    public PostAdapter() {
+    }
 
     public void setItems(Collection<Post> new_posts) {
         posts.addAll(new_posts);
@@ -53,9 +58,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.author.setText(post.getAuthor_name());
-        holder.creation_date.setText(Double.toString(post.getCreation_date()));
+        holder.creation_date.setText();
         holder.comments_count.setText(post.getComments_count());
-        holder.image.loadUrl(post.getImage_source());
+        Picasso.get().load(post.getThumbnail_source()).resize(140, 78).into(holder.image);
         holder.image.setVisibility(post.getImage_source() != null ? View.VISIBLE : View.GONE);
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +78,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     class PostViewHolder extends RecyclerView.ViewHolder {
         private TextView author;
         private TextView creation_date;
-        private WebView image;
+        private ImageView image;
         private TextView comments_count;
 
         public PostViewHolder(View itemView) {
