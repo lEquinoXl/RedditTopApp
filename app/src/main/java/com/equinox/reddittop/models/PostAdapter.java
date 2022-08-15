@@ -58,7 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.author.setText(post.getAuthor_name());
-        holder.creation_date.setText();
+        holder.creation_date.setText(post.getCreation_date());
         holder.comments_count.setText(post.getComments_count());
         Picasso.get().load(post.getThumbnail_source()).resize(140, 78).into(holder.image);
         holder.image.setVisibility(post.getImage_source() != null ? View.VISIBLE : View.GONE);
