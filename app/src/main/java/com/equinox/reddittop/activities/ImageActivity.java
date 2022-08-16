@@ -39,20 +39,21 @@ public class ImageActivity extends AppCompatActivity {
         download_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try{
-                Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
-                saveReceivedImage(bitmap, LocalDateTime.now().toString());
-                }catch (NullPointerException e) {
-                Toast toast = Toast.makeText(ImageActivity.this, "Error. No image", Toast.LENGTH_LONG);
-                toast.show();
-            }
+                try {
+                    Bitmap bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                    saveReceivedImage(bitmap, LocalDateTime.now().toString());
+                } catch (NullPointerException e) {
+                    Toast toast = Toast.makeText(ImageActivity.this, "Error. No image", Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
     }
-    private void saveReceivedImage(Bitmap image, String imageName){
+
+    private void saveReceivedImage(Bitmap image, String imageName) {
         try {
             File path = new File(ImageActivity.this.getFilesDir(), "RedditTop" + File.separator + "Images");
-            if(!path.exists()){
+            if (!path.exists()) {
                 path.mkdirs();
             }
             File outFile = new File(path, imageName + ".jpeg");

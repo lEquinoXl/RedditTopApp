@@ -21,7 +21,9 @@ public class Post implements Parcelable {
         comments_count = in.readString();
         thumbnail_source = in.readString();
     }
-    public Post(){}
+
+    public Post() {
+    }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override
@@ -75,7 +77,7 @@ public class Post implements Parcelable {
     }
 
     public String getComments_count() {
-        return comments_count+" comments";
+        return comments_count + " comments";
     }
 
     public void setComments_count(String comments_count) {
