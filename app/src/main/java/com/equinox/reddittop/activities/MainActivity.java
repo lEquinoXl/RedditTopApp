@@ -3,6 +3,7 @@ package com.equinox.reddittop.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
@@ -42,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private Boolean is_scrolling = false;
     int current_items, total_items, scrolled_out_items;
     int page_size = 10;
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("posts", (ArrayList)posts);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +96,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         posts.clear();
-        progressBar.setVisibility(View.VISIBLE);
-        new GetData().execute(getString(R.string.source));
+        if (savedInstanceState != null){
+            posts.addAll(savedInstanceState.getParcelableArrayList("posts"));
+            adapter.notifyDataSetChanged();
+        }else{
+            progressBar.setVisibility(View.VISIBLE);
+        new GetData().execute(getString(R.string.source));}
+
     }
 
     private class GetData extends AsyncTask<String, String, String> {

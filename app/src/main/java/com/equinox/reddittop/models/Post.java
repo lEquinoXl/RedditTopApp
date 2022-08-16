@@ -1,7 +1,10 @@
 package com.equinox.reddittop.models;
 
 
-public class Post {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Post implements Parcelable {
     private String author_name;
     private double creation_date;
     private String title;
@@ -9,6 +12,28 @@ public class Post {
     private String comments_count;
     private String thumbnail_source;
 
+
+    protected Post(Parcel in) {
+        author_name = in.readString();
+        creation_date = in.readDouble();
+        title = in.readString();
+        image_source = in.readString();
+        comments_count = in.readString();
+        thumbnail_source = in.readString();
+    }
+    public Post(){}
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 
     public String getAuthor_name() {
         return author_name;
@@ -63,5 +88,20 @@ public class Post {
 
     public void setThumbnail_source(String thumbnail_source) {
         this.thumbnail_source = thumbnail_source;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(author_name);
+        parcel.writeDouble(creation_date);
+        parcel.writeString(title);
+        parcel.writeString(image_source);
+        parcel.writeString(comments_count);
+        parcel.writeString(thumbnail_source);
     }
 }
