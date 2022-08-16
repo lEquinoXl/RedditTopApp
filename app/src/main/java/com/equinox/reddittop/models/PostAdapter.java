@@ -20,6 +20,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     private List<Post> posts = new ArrayList<>();
 
+    private static final int LOADING = 0;
+    private static final int ITEM = 1;
+    private boolean isLoadingAdded = false;
+
     public interface OnPhotoClickListener {
         void onPhotoClick(String image_source);
     }

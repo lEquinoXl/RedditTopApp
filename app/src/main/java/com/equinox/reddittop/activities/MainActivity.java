@@ -1,13 +1,18 @@
 package com.equinox.reddittop.activities;
 
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
 
 import com.equinox.reddittop.R;
 import com.equinox.reddittop.models.Post;
@@ -31,7 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<Post> posts = new ArrayList<>();
+    private LinearLayoutManager manager;
+    private ProgressBar progressBar;
     private PostAdapter adapter;
+    private Boolean is_scrolling = false;
+    int current_items, total_items, scrolled_out_items;
+    int page_size = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +49,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.viewArticles);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        progressBar = findViewById(R.id.progressBar);
+        manager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                    is_scrolling = true;
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                current_items = manager.getChildCount();
+                total_items = manager.getItemCount();
+                scrolled_out_items = manager.findFirstVisibleItemPosition();
+
+                if (is_scrolling && (total_items == current_items + scrolled_out_items)) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    is_scrolling = false;
+                    new GetData().execute(getString(R.string.source));
+                }
+            }
+        });
 
         PostAdapter.OnPhotoClickListener photoClickListener = new PostAdapter.OnPhotoClickListener() {
             @Override
@@ -53,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new PostAdapter(posts, photoClickListener);
         recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        posts.clear();
+        progressBar.setVisibility(View.VISIBLE);
         new GetData().execute(getString(R.string.source));
     }
 
@@ -96,14 +132,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            posts.clear();
             ArrayList<String> json_posts = new ArrayList<>();
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 JSONArray jsonPosts = jsonObject.getJSONObject("data").getJSONArray("children");
                 if (jsonPosts != null) {
-
-                    for (int i = 0; i < 10; i++) {
+                    int size = posts.size() + page_size;
+                    for (int i = posts.size(); i < size; i++) {
+                        System.out.println(posts.size());
+                        if (i >= jsonPosts.length()) {
+                            Toast.makeText(MainActivity.this, "End", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
                         Post post = new Post();
                         json_posts.add(jsonPosts.getString(i));
                         post.setAuthor_name(jsonPosts.getJSONObject(i).getJSONObject("data").getString("subreddit"));
@@ -115,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         posts.add(post);
                     }
                     adapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
